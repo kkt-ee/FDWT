@@ -21,3 +21,7 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Hidden files/dirs everywhere except .gitignore
+.*
+!.gitignore

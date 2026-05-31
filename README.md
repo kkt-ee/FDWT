@@ -1,7 +1,7 @@
-# DWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch)
+# FDWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch)
 
-[![PyPI Version](https://img.shields.io/pypi/v/dwt?label=PyPI&color=gold)](https://pypi.org/project/dwt/)
-[![PyPI Python](https://img.shields.io/pypi/pyversions/dwt)](https://pypi.org/project/dwt/)
+[![PyPI Version](https://img.shields.io/pypi/v/fdwt?label=PyPI&color=gold)](https://pypi.org/project/fdwt/)
+[![PyPI Python](https://img.shields.io/pypi/pyversions/fdwt)](https://pypi.org/project/fdwt/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12%2B-green)](https://developer.nvidia.com/cuda-toolkit)
 [![License](https://img.shields.io/badge/license-Apache%202.0-deepgreen.svg?style=flat)](LICENSE)
@@ -25,14 +25,14 @@ Coiflets (coif)      Biorthogonal (bior)  Reverse biorthogonal (rbio)
 ## Installation
 
 ```bash
-pip install dwt
+pip install fdwt
 ```
 
 From source:
 
 ```bash
-git clone https://github.com/kkt-ee/DWT.git
-cd DWT-PyTorch
+git clone https://github.com/kkt-ee/FDWT.git
+cd FDWT
 pip install .
 ```
 
@@ -153,9 +153,9 @@ CUDA     12+
 ## Uninstall
 
 ```bash
-pip uninstall dwt
+pip uninstall fdwt
 ```
 
 ---
 
-*DWT (C) 2026 Kishore Kumar Tarafdar, भारत* 🇮🇳
+*FDWT (C) 2026 Kishore Kumar Tarafdar, भारत* 🇮🇳

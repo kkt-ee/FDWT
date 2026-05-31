@@ -3,12 +3,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dwt"
+name = "fdwt"
 version = "0.1.0"
 authors = [
   { name="Kishore Kumar Tarafdar", email="kkt.compute@gmail.com" },
 ]
-description = "DWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch)"
+description = "FDWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch)"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["torch>=2.0"]
@@ -21,6 +21,9 @@ classifiers = [
 license = "Apache-2.0"
 license-files = [ "LICENSE" ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["dwt"]
+
 [project.urls]
-Homepage = "https://github.com/kkt-ee/DWT"
-Issues = "https://github.com/kkt-ee/DWT/issues"
+Homepage = "https://github.com/kkt-ee/FDWT"
+Issues = "https://github.com/kkt-ee/FDWT/issues"

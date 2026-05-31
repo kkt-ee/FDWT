@@ -1,5 +1,5 @@
 """ॐ
-DWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch).
+FDWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch).
 Copyright 2026 Kishore Kumar Tarafdar
 
 Licensed under the Apache License, Version 2.0 (the "License");
