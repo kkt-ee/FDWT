@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dwt"
+version = "0.1.0"
+authors = [
+  { name="Kishore Kumar Tarafdar", email="kkt.compute@gmail.com" },
+]
+description = "DWT: Fast Multidimensional Discrete Wavelet Transform Layers (PyTorch)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["torch>=2.0"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering",
+  "Intended Audience :: Science/Research"
+]
+license = "Apache-2.0"
+license-files = [ "LICENSE" ]
+
+[project.urls]
+Homepage = "https://github.com/kkt-ee/DWT"
+Issues = "https://github.com/kkt-ee/DWT/issues"
