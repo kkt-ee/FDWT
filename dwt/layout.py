@@ -21,6 +21,16 @@ from dwt.filters import FetchAnalysisSynthesisFilters
 from dwt.dwt_op import make_dwt_operator_matrix_A
 
 
+_VALID_BACKENDS = ('matrix', 'filterbank')
+
+
+def _validate_backend(backend: str) -> str:
+    if backend not in _VALID_BACKENDS:
+        choices = ', '.join(repr(value) for value in _VALID_BACKENDS)
+        raise ValueError(f'backend must be one of: {choices}.')
+    return backend
+
+
 class DWTNDlayout(nn.Module):
     """Base analysis module.  Builds A lazily on first forward call (N unknown at init).
 
@@ -30,10 +40,16 @@ class DWTNDlayout(nn.Module):
       3D: (batch, D, H, W, C)
     """
 
-    def __init__(self, wave: str = 'haar', clean: bool = True):
+    def __init__(
+        self,
+        wave: str = 'haar',
+        clean: bool = True,
+        backend: str = 'matrix',
+    ):
         super().__init__()
         self.wave = wave
         self.clean = clean
+        self.backend = _validate_backend(backend)
         w = FetchAnalysisSynthesisFilters(wave)
         self.h0, self.h1 = w.analysis()
         self._A_cache: torch.Tensor | None = None
@@ -57,10 +73,16 @@ class IDWTNDlayout(nn.Module):
     For biorthogonal wavelets (bior/rbio) synthesis filters differ from analysis.
     """
 
-    def __init__(self, wave: str = 'haar', clean: bool = True):
+    def __init__(
+        self,
+        wave: str = 'haar',
+        clean: bool = True,
+        backend: str = 'matrix',
+    ):
         super().__init__()
         self.wave = wave
         self.clean = clean
+        self.backend = _validate_backend(backend)
         w = FetchAnalysisSynthesisFilters(wave)
         if 'bior' in wave or 'rbio' in wave:
             self.h0, self.h1 = w.synthesis()

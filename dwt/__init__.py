@@ -19,8 +19,8 @@ from dwt.dwt_op import make_dwt_operator_matrix_A
 from dwt.DWT1D import DWT1D, IDWT1D
 from dwt.DWT2D import DWT2D, IDWT2D
 from dwt.DWT3D import DWT3D, IDWT3D
-from dwt.multilevel.dwt1 import dwt, idwt
+from dwt.multilevel.dwt1 import dwt, dwt_packed_axis, idwt, idwt_packed_axis
 from dwt.multilevel.dwt2 import dwt2, idwt2
 from dwt.multilevel.dwt3 import dwt3, idwt3
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"

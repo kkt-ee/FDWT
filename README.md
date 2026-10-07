@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-deepgreen.svg?style=flat)](LICENSE)
 [![arXiv](https://img.shields.io/badge/arXiv-2504.04168-b31b1b.svg)](https://doi.org/10.48550/arXiv.2504.04168)
 
-Fast 1D, 2D, and 3D Discrete Wavelet Transform (DWT) and Inverse DWT (IDWT) layers for backpropagation networks. Drop-in `nn.Module` layers with einsum-based fast computation. CPU and GPU ready.
+Fast 1D, 2D, and 3D Discrete Wavelet Transform (DWT) and Inverse DWT (IDWT) layers for backpropagation networks. Drop-in `nn.Module` layers with dense-operator and matrix-free filter-bank computation. CPU and GPU ready.
 
 > PyTorch port of [TFDWT](https://github.com/kkt-ee/TFDWT) — Fast Discrete Wavelet Transform TensorFlow Layers ([arXiv:2504.04168](https://doi.org/10.48550/arXiv.2504.04168)).
 
@@ -21,7 +21,8 @@ Coiflets (coif)      Biorthogonal (bior)  Reverse biorthogonal (rbio)
 **Shape requirements**
 
 - Single-level: dimensions must be even. 2D and 3D inputs must be square / cubic.
-- Multilevel (L levels): each spatial side must be divisible by 2^L. Pad to the nearest multiple of 2^L when needed.
+- Multilevel (L levels): each transformed length must be divisible by 2^L,
+  and every decomposition stage must cover the selected wavelet-filter length.
 
 ---
 
@@ -73,6 +74,18 @@ xhat = IDWT3D(wave='bior1.3')(lh) # (B, D/2, H/2, W/2, C*8) -> (B, D, H, W, C)
 `clean=True` (default) packs subbands along the channel axis and halves spatial dims.
 `clean=False` returns the raw operator output at full spatial size.
 
+The layers use `backend='matrix'` by default, preserving the existing dense
+operator implementation. Set `backend='filterbank'` on both DWT and IDWT to
+compute the same periodic transform with strided convolutions, without storing
+an `N x N` operator matrix:
+
+```python
+lh = DWT1D(wave='bior3.1', backend='filterbank')(x)
+xhat = IDWT1D(wave='bior3.1', backend='filterbank')(lh)
+```
+
+The same `backend` argument is available on the 2D and 3D layers.
+
 ---
 
 ## Tensor shapes
@@ -99,8 +112,28 @@ Returns a list `[H1, H2, ..., H_level, L_level]`. Each `Hi` contains all high-pa
 ```python
 from dwt.multilevel.dwt1 import dwt, idwt
 
-subbands = dwt(x, level=3, wave='haar')   # [H1, H2, H3, L3]
-xhat     = idwt(subbands, wave='haar')
+subbands = dwt(                           # [H1, H2, H3, L3]
+    x, level=3, wave='haar', backend='filterbank'
+)
+xhat = idwt(
+    subbands, wave='haar', level=3, backend='filterbank'
+)
+```
+
+For a length-preserving coefficient tensor, including transforms along an
+arbitrary tensor axis, use the packed 1D helpers. Their coefficient order is
+`[L_level, H_level, H_(level-1), ..., H1]`:
+
+```python
+from dwt.multilevel.dwt1 import dwt_packed_axis, idwt_packed_axis
+
+coefficients = dwt_packed_axis(
+    x, level=3, wave='bior2.2', axis=1, backend='filterbank'
+)
+xhat = idwt_packed_axis(
+    coefficients, level=3, wave='bior2.2', axis=1,
+    backend='filterbank',
+)
 ```
 
 **2D**
@@ -159,11 +192,12 @@ CUDA     12+
 pip uninstall fdwt
 ```
 
+
 ---
 
 ## Citation
 
-If you use FDWT in your work, please cite the original TFDWT paper:
+Cite the original TFDWT paper:
 
 ```bibtex
 @misc{tarafdar2025tfdwt,

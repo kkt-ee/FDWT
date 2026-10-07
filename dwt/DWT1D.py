@@ -16,6 +16,7 @@ limitations under the License."""
 
 import torch
 from dwt.layout import DWTNDlayout, IDWTNDlayout
+from dwt.dwt_op import analysis_filterbank_axis, synthesis_filterbank_axis
 
 
 class DWT1D(DWTNDlayout):
@@ -26,9 +27,12 @@ class DWT1D(DWTNDlayout):
     """
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        N = x.shape[1]
-        A = self._get_A(N, x.device)
-        out = torch.einsum('ij,bjc->bic', A, x)
+        if self.backend == 'matrix':
+            N = x.shape[1]
+            A = self._get_A(N, x.device)
+            out = torch.einsum('ij,bjc->bic', A, x)
+        else:
+            out = analysis_filterbank_axis(x, self.h0, self.h1, axis=1)
         if self.clean:
             return self._extract_2subbands(out)
         return out
@@ -50,9 +54,11 @@ class IDWT1D(IDWTNDlayout):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.clean:
             x = self._join_2subbands(x)
-        N = x.shape[1]
-        S = self._get_S(N, x.device)
-        return torch.einsum('ij,bjc->bic', S, x)
+        if self.backend == 'matrix':
+            N = x.shape[1]
+            S = self._get_S(N, x.device)
+            return torch.einsum('ij,bjc->bic', S, x)
+        return synthesis_filterbank_axis(x, self.h0, self.h1, axis=1)
 
     def _join_2subbands(self, x: torch.Tensor) -> torch.Tensor:
         L, H = torch.chunk(x, 2, dim=-1)

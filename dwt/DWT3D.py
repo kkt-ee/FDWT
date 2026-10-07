@@ -16,6 +16,7 @@ limitations under the License."""
 
 import torch
 from dwt.layout import DWTNDlayout, IDWTNDlayout
+from dwt.dwt_op import analysis_filterbank_axis, synthesis_filterbank_axis
 
 
 class DWT3D(DWTNDlayout):
@@ -26,6 +27,14 @@ class DWT3D(DWTNDlayout):
     """
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.backend == 'filterbank':
+            x = analysis_filterbank_axis(x, self.h0, self.h1, axis=2)
+            x = analysis_filterbank_axis(x, self.h0, self.h1, axis=1)
+            x = analysis_filterbank_axis(x, self.h0, self.h1, axis=3)
+            if self.clean:
+                return self._extract_8subbands(x)
+            return x
+
         N = x.shape[1]
         A = self._get_A(N, x.device)
         # columns (axis 2): swap D and H
@@ -65,6 +74,11 @@ class IDWT3D(IDWTNDlayout):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.clean:
             x = self._join_octants(x)
+        if self.backend == 'filterbank':
+            x = synthesis_filterbank_axis(x, self.h0, self.h1, axis=2)
+            x = synthesis_filterbank_axis(x, self.h0, self.h1, axis=1)
+            return synthesis_filterbank_axis(x, self.h0, self.h1, axis=3)
+
         N = x.shape[1]
         S = self._get_S(N, x.device)
         # columns

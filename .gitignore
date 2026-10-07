@@ -25,3 +25,4 @@ Thumbs.db
 # Hidden files/dirs everywhere except .gitignore
 .*
 !.gitignore
+depr

@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "fdwt"
-version = "0.1.0"
+name = "FDWT"
+version = "0.1.2"
 authors = [
   { name="Kishore Kumar Tarafdar", email="kkt.compute@gmail.com" },
 ]
