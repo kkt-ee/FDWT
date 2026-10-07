@@ -5,8 +5,11 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-12%2B-green)](https://developer.nvidia.com/cuda-toolkit)
 [![License](https://img.shields.io/badge/license-Apache%202.0-deepgreen.svg?style=flat)](LICENSE)
+[![arXiv](https://img.shields.io/badge/arXiv-2504.04168-b31b1b.svg)](https://doi.org/10.48550/arXiv.2504.04168)
 
 Fast 1D, 2D, and 3D Discrete Wavelet Transform (DWT) and Inverse DWT (IDWT) layers for backpropagation networks. Drop-in `nn.Module` layers with einsum-based fast computation. CPU and GPU ready.
+
+> PyTorch port of [TFDWT](https://github.com/kkt-ee/TFDWT) — Fast Discrete Wavelet Transform TensorFlow Layers ([arXiv:2504.04168](https://doi.org/10.48550/arXiv.2504.04168)).
 
 **Supported wavelet families**
 
@@ -154,6 +157,22 @@ CUDA     12+
 
 ```bash
 pip uninstall fdwt
+```
+
+---
+
+## Citation
+
+If you use FDWT in your work, please cite the original TFDWT paper:
+
+```bibtex
+@misc{tarafdar2025tfdwt,
+  title   = {TFDWT: Fast Discrete Wavelet Transform TensorFlow Layers},
+  author  = {Kishore Kumar Tarafdar},
+  year    = {2025},
+  url     = {https://doi.org/10.48550/arXiv.2504.04168},
+  note    = {arXiv:2504.04168}
+}
 ```
 
 ---
